@@ -1,0 +1,83 @@
+{
+  "name": "sirf_mr_reco",
+  "label": "sirf_mr_reco",
+  "description": "MR reconstruction using SIRF",
+  "version": "0.2",
+  "schema-version": "1.0",
+  "image": "sirf_for_xnat:latest",
+  "command-type": "docker",
+  "enabled": true,
+  "command-name": "sirf_mr_reco",
+  "command-line": "./mr_recon.sh",
+  "mounts": [
+    {
+      "name": "raw-in",
+      "writable": false,
+      "path": "/input"
+    },
+    {
+      "name": "dcm-out",
+      "writable": true,
+      "path": "/output"
+    }
+  ],
+  "environment-variables": {},
+  "ports": {},
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "dicom",
+      "description": "Reconstructed dcm files",
+      "required": true,
+      "mount": "dcm-out"
+    }
+  ],
+  "xnat": [
+    {
+      "name": "mr_recon",
+      "label": "mr_recon",
+      "description": "Reconstruct MR data",
+      "contexts": [
+        "xnat:imageScanData"
+      ],
+      "external-inputs": [
+        {
+          "name": "scan",
+          "description": "Input scan",
+          "type": "Scan",
+          "matcher": "'MR_RAW' in @.resources[*].label",
+          "required": true,
+          "load-children": true
+        }
+      ],
+      "derived-inputs": [
+        {
+          "name": "scan-raw",
+          "description": "The raw resource on the scan",
+          "type": "Resource",
+          "matcher": "@.label == 'MR_RAW'",
+          "required": true,
+          "provides-files-for-command-mount": "raw-in",
+          "load-children": true,
+          "derived-from-wrapper-input": "scan",
+          "multiple": false
+        }
+      ],
+      "output-handlers": [
+        {
+          "name": "dcm-resource",
+          "accepts-command-output": "dicom",
+          "as-a-child-of": "scan",
+          "type": "Resource",
+          "label": "DICOM",
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "container-labels": {},
+  "generic-resources": {},
+  "ulimits": {},
+  "secrets": [],
+  "visibility": "public"
+}

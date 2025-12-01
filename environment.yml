@@ -1,0 +1,9 @@
+name: xnat-sirf
+channels:
+  - conda-forge
+dependencies:
+  - stir
+  - xnat
+  - xmlschema
+  - ipykernel
+

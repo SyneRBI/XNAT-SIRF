@@ -1,0 +1,3 @@
+xnat4tests
+ismrmrd
+pre-commit
