@@ -28,6 +28,7 @@ MANIFEST
 
 # SIRF and XNAT specific ignores
 .xnat4tests/
+.zenodo_data/
 *.jar
 
 # PyInstaller

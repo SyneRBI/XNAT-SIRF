@@ -256,7 +256,10 @@ def check_header_valid_convert_to_dict(
     return xml_schema.to_dict(ismrmrd_header)  # type: ignore
 
 
-def mrd_2_xnat(mrd_file_path: Path, xml_schema_filepath: Path) -> dict[str, Any]:
+def mrd_2_xnat(
+    mrd_file_path: Path,
+    xml_schema_filepath: Path = Path(__file__).parents[0] / "ismrmrd.xsd",
+) -> dict[str, Any]:
     """
     This takes the ismrmrd_header and converts it to a dictionary compatible with XNAT data types.
     The xml_schema_filename points to a local copy of the official MRD header xml schema (.xsd file):
