@@ -1,0 +1,68 @@
+{
+  "name": "sirf_pet_reco",
+  "description": "PET reconstruction using SIRF",
+  "label": "sirf_pet_reco",
+  "version": "0.2",
+  "schema-version": "1.0",
+  "type": "docker",
+  "image": "sirf_for_xnat:latest",
+  "enabled": true,
+  "command-line": "./pet_recon.sh",
+  "mounts": [
+      {
+          "name": "raw-in",
+          "writable": "false",
+          "path": "/input"
+      },
+      {
+          "name": "dcm-out",
+          "writable": "true",
+          "path": "/output"
+      }
+  ],
+  "outputs": [
+      {
+          "name": "dicom",
+          "description": "Reconstructed dcm files",
+          "mount": "dcm-out",
+          "required": "true"
+      }
+  ],
+  "xnat": [
+      {
+          "name": "pet_recon",
+          "description": "Reconstruct PET data",
+          "label": "pet_recon",
+          "contexts": ["xnat:imageScanData"],
+          "external-inputs": [
+              {
+                  "name": "scan",
+                  "description": "Input scan",
+                  "type": "Scan",
+                  "required": true,
+                  "matcher": "'PET_RAW' in @.resources[*].label"
+              }
+          ],
+          "derived-inputs": [
+              {
+                  "name": "scan-raw",
+                  "description": "The raw resource on the scan",
+                  "type": "Resource",
+                  "derived-from-wrapper-input": "scan",
+                  "provides-files-for-command-mount": "raw-in",
+                  "matcher": "@.label == 'PET_RAW'"
+              }
+          ],
+          "output-handlers": [
+              {
+                  "name": "dcm-resource",
+                  "accepts-command-output": "dicom",
+                  "as-a-child-of": "scan",
+                  "type": "Resource",
+                  "label": "DICOM"
+              }
+          ]
+      }
+  ]
+}
+
