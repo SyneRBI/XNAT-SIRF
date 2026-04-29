@@ -8,7 +8,7 @@
   "command-type": "docker",
   "enabled": true,
   "command-name": "sirf_mr_reco",
-  "command-line": "./mr_recon.sh",
+  "command-line": "./recon_stgeorge.sh",
   "mounts": [
     {
       "name": "raw-in",
