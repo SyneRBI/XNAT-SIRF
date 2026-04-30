@@ -4,6 +4,7 @@ FROM ${BASE_IMAGE} AS base
 USER jovyan
 RUN pip install pydicom
 RUN pip install ismrmrd
+RUN pip install nii2dcm
 
 
 USER root
